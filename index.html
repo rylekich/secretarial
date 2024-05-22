@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    @font-face {
+        font-family: 'secretarial';
+        src: url(secretarial.otf);
+    }
+
+    body, html{
+        margin: 0;
+        height: 100vh;
+    }
+
+    section{
+        display: flex;
+        height: 100%;
+    }
+
+    textarea{
+        font-family: 'secretarial';
+        color: red;
+        font-size: 5rem;
+        border: 0;
+        resize: none;
+        width: 80vw;
+        height: 100%;
+        overflow: scroll;
+        display: block;
+    }
+
+    div.transcript{
+        padding: 20px;
+    }
+
+    div.btn{
+        padding: 20px;
+        align-self: center;
+        margin: auto;
+    }
+
+    button{
+        font-family: Arial, Helvetica, sans-serif;
+        text-transform: uppercase;
+        font-weight: bold;
+        background-color: white;
+        color: red;
+        border: red 1px solid;
+        border-radius: 2px;
+        margin: auto;
+    }
+</style>
+<body>
+
+    <section>
+        <div class="transcript">
+            <textarea id="textarea"></textarea>
+        </div>
+        <div class="btn">
+            <button id="button" onclick="toggleStartStop()"></button>
+        </div>
+    </section>
+
+
+<script type="text/javascript">
+    var recognizing;
+    var recognition = new webkitSpeechRecognition();
+    recognition.continuous = true;
+    reset();
+    recognition.onend = reset();
+
+    recognition.onresult = function (event) {
+        for (var i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) {
+            textarea.value += event.results[i][0].transcript;
+            }
+        }
+    }
+
+    function reset() {
+        recognizing = false;
+        button.innerHTML = "Click to Speak";
+    }
+
+    function toggleStartStop() {
+        if (recognizing) {
+            recognition.stop();
+            reset();
+        } else {
+            recognition.start();
+            recognizing = true;
+            button.innerHTML = "Click to Stop";
+        }
+    }
+</script>
+    
+</body>
+</html>
